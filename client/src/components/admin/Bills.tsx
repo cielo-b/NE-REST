@@ -5,9 +5,8 @@ import {
   CardContent,
   Typography,
   Button,
-  Grid,
 } from '@mui/material';
-import { DataGrid, type GridColDef } from '@mui/x-data-grid';
+import { DataGrid, type GridColDef, type GridRenderCellParams } from '@mui/x-data-grid';
 import { format } from 'date-fns';
 import axiosInstance from '../../services/axios';
 import { toast } from 'react-toastify';
@@ -20,7 +19,7 @@ interface Bill {
   parking: {
     id: string;
     name: string;
-  };
+  } | null;
   amount: number;
 }
 
@@ -64,14 +63,19 @@ const Bills: React.FC = () => {
   };
 
   const columns: GridColDef[] = [
-    { field: 'plateNumber', headerName: 'Plate Number', width: 130 },
+    { 
+      field: 'plateNumber', 
+      headerName: 'Plate Number', 
+      width: 130,
+      valueGetter: (params) => params.row?.plateNumber || 'N/A'
+    },
     { 
       field: 'entryDateTime', 
       headerName: 'Entry Time', 
       width: 180,
       valueFormatter: (params) => {
         try {
-          return format(new Date(params.value), 'PPpp');
+          return params.value ? format(new Date(params.value), 'PPpp') : 'N/A';
         } catch (error) {
           return 'Invalid date';
         }
@@ -83,7 +87,7 @@ const Bills: React.FC = () => {
       width: 180,
       valueFormatter: (params) => {
         try {
-          return format(new Date(params.value), 'PPpp');
+          return params.value ? format(new Date(params.value), 'PPpp') : 'N/A';
         } catch (error) {
           return 'Invalid date';
         }
@@ -93,13 +97,18 @@ const Bills: React.FC = () => {
       field: 'parking',
       headerName: 'Parking',
       width: 200,
-      valueGetter: (params) => params.row.parking.name,
+      valueGetter: (params) => params.row.parking?.name || 'N/A',
     },
     {
       field: 'amount',
       headerName: 'Amount',
       width: 130,
-      valueFormatter: (params) => `$${params.value.toFixed(2)}`,
+      valueFormatter: (params) => {
+        if (typeof params.value === 'number') {
+          return `$${params.value.toFixed(2)}`;
+        }
+        return 'N/A';
+      },
     },
     {
       field: 'actions',
@@ -129,10 +138,14 @@ const Bills: React.FC = () => {
             rows={bills}
             columns={columns}
             getRowId={(row) => row.id}
-            pageSize={10}
-            rowsPerPageOptions={[10]}
+            initialState={{
+              pagination: {
+                paginationModel: { pageSize: 10, page: 0 },
+              },
+            }}
+            pageSizeOptions={[10]}
             autoHeight
-            disableSelectionOnClick
+            disableRowSelectionOnClick
             loading={loading}
           />
         </CardContent>
@@ -141,4 +154,4 @@ const Bills: React.FC = () => {
   );
 };
 
-export default Bills; 
+export default Bills;

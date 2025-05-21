@@ -67,7 +67,7 @@ const ActiveEntries: React.FC = () => {
         try {
           return format(new Date(params.value), 'PPpp');
         } catch (error) {
-          return 'Invalid date';
+          return Date.now();
         }
       }
     },

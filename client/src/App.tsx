@@ -77,7 +77,7 @@ const App: React.FC = () => {
                       }
                     />
                     <Route
-                      path="admin/billd"
+                      path="admin/bills"
                       element={
                         <PrivateRoute roles={[ERole.ADMIN]}>
                           <Bills />
@@ -89,6 +89,14 @@ const App: React.FC = () => {
                       element={
                         <PrivateRoute roles={[ERole.ATTENDANT]}>
                           <ParkingOperations />
+                        </PrivateRoute>
+                      }
+                    />
+                     <Route
+                      path="attendant/bills"
+                      element={
+                        <PrivateRoute roles={[ERole.ATTENDANT]}>
+                          <Bills />
                         </PrivateRoute>
                       }
                     />

@@ -234,7 +234,7 @@ const ParkingOperations = () => {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Grid container spacing={3}>
+      <Grid display={"flex"} flexDirection={"column"} container spacing={3}>
         <Grid item xs={12}>
           <Typography variant="h4" gutterBottom>
             Parking Operations
@@ -284,29 +284,50 @@ const ParkingOperations = () => {
         </Grid>
 
         {/* Active Entries */}
-        <Grid item xs={12} md={6} component="div">
-          <Card>
-            <CardContent>
-              <Typography variant="h6" gutterBottom>
-                Active Entries
-              </Typography>
-              <DataGrid
-                rows={activeEntries}
-                columns={columns}
-                getRowId={(row) => row.id}
-                initialState={{
-                  pagination: {
-                    paginationModel: { pageSize: 10, page: 0 },
-                  },
-                }}
-                pageSizeOptions={[10]}
-                autoHeight
-                disableRowSelectionOnClick
-                loading={loading}
-              />
-            </CardContent>
-          </Card>
-        </Grid>
+        {/* Active Entries */}
+<Grid item xs={12} component="div">
+  <Card>
+    <CardContent>
+      <Typography variant="h6" gutterBottom>
+        Active Entries
+      </Typography>
+      <Box sx={{ width: '100%' }}>
+        <DataGrid
+          rows={activeEntries}
+          columns={columns}
+          getRowId={(row) => row.id}
+          initialState={{
+            pagination: {
+              paginationModel: { pageSize: 10, page: 0 },
+            },
+          }}
+          pageSizeOptions={[10]}
+          autoHeight
+          disableRowSelectionOnClick
+          loading={loading}
+          sx={{
+            '& .MuiDataGrid-columnHeaders': {
+              backgroundColor: 'primary.main',
+              color: 'primary.contrastText',
+            },
+            '& .MuiDataGrid-cell': {
+              borderRight: '1px solid rgba(224, 224, 224, 0.5)',
+            },
+            '& .MuiDataGrid-columnHeader': {
+              borderRight: '1px solid rgba(255, 255, 255, 0.5)',
+            },
+            '& .MuiDataGrid-cell:last-child': {
+              borderRight: 'none',
+            },
+            '& .MuiDataGrid-columnHeader:last-child': {
+              borderRight: 'none',
+            },
+          }}
+        />
+      </Box>
+    </CardContent>
+  </Card>
+</Grid>
       </Grid>
 
       {/* Entry Dialog */}
