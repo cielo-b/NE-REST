@@ -11,7 +11,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import Grid from '@mui/material/Grid';
+import { Grid } from '@mui/material';
 import { DataGrid, type GridColDef } from '@mui/x-data-grid';
 import axios from 'axios';
 import DashboardLayout from '../../layouts/DashboardLayout';

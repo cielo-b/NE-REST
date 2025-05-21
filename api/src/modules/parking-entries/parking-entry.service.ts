@@ -8,7 +8,6 @@ import { CreateParkingEntryDto } from "./dto/create-parking-entry.dto";
 import { ExitParkingDto } from "./dto/exit-parking.dto";
 import { Between } from "typeorm";
 import PDFDocument from "pdfkit";
-import { format } from 'date-fns';
 
 export class ParkingEntryService {
   private entryRepo: Repository<ParkingEntry> = AppDataSource.getRepository(ParkingEntry);
@@ -281,15 +280,18 @@ export class ParkingEntryService {
 
   async generateReport(startDate: Date, endDate: Date): Promise<ApiResponse> {
     try {
-      const entries = await this.entryRepo.find({
-        where: {
-          entryDateTime: Between(startDate, endDate),
-        },
-        relations: ['parking'],
-        order: {
-          entryDateTime: 'DESC',
-        },
-      });
+      // const entries = await this.entryRepo.find({
+      //   where: {
+      //     entryDateTime: Between(startDate, endDate),
+      //   },
+      //   relations: ['parking'],
+      //   order: {
+      //     entryDateTime: 'DESC',
+      //   },
+      // });
+
+      const entries  = await this.entryRepo.find({relations: ['parking']})
+      console.log(entries)
 
       const doc = new PDFDocument();
       const chunks: Buffer[] = [];
@@ -299,7 +301,7 @@ export class ParkingEntryService {
       // Add report header
       doc.fontSize(20).text('Parking Report', { align: 'center' });
       doc.moveDown();
-      doc.fontSize(12).text(`Period: ${format(startDate, 'PP')} - ${format(endDate, 'PP')}`, { align: 'center' });
+      // doc.fontSize(12).text(`Period: ${format(startDate, 'PP')} - ${format(endDate, 'PP')}`, { align: 'center' });
       doc.moveDown();
 
       // Add summary
@@ -343,9 +345,9 @@ export class ParkingEntryService {
         currentX += columnWidths[0];
         doc.text(entry.parking.name, currentX, currentY);
         currentX += columnWidths[1];
-        doc.text(format(new Date(entry.entryDateTime), 'PPp'), currentX, currentY);
+        // doc.text(format(new Date(entry.entryDateTime), 'PPp'), currentX, currentY);
         currentX += columnWidths[2];
-        doc.text(entry.exitDateTime ? format(new Date(entry.exitDateTime), 'PPp') : 'Active', currentX, currentY);
+        // doc.text(entry.exitDateTime ? format(new Date(entry.exitDateTime), 'PPp') : 'Active', currentX, currentY);
         currentX += columnWidths[3];
         doc.text(entry.chargedAmount ? `$${entry.chargedAmount.toFixed(2)}` : '-', currentX, currentY);
         currentY += 20;
@@ -369,7 +371,7 @@ export class ParkingEntryService {
       return {
         success: false,
         message: 'Failed to generate report',
-        error: error.message,
+        // error: error.message,
         code: 500,
       };
     }

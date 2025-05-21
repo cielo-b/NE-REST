@@ -22,13 +22,13 @@ interface SidebarProps {
 const Sidebar = ({ role }: SidebarProps) => {
   const attendantLinks = [
     { text: "Operations", icon: <CarIcon />, path: "/dashboard/attendant/operations" },
-    { text: "Bills", icon: <ReceiptIcon />, path: "/dashboard/attendant/bills" },
+    // { text: "Bills", icon: <ReceiptIcon />, path: "/dashboard/attendant/bills" },
   ];
 
   const adminLinks = [
     { text: "Parkings", icon: <ParkingIcon />, path: "/dashboard/admin/parking" },
     { text: "Reports", icon: <ReportIcon />, path: "/dashboard/admin/reports" },
-    { text: "Bills", icon: <ReceiptIcon />, path: "/dashboard/admin/bills" },
+    // { text: "Bills", icon: <ReceiptIcon />, path: "/dashboard/admin/bills" },
   ];
 
   const links = role === ERole.ADMIN ? adminLinks : attendantLinks;

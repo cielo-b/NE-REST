@@ -42,7 +42,7 @@ const Login = () => {
       if (user.role === ERole.ADMIN) {
         navigate("/dashboard/admin/parking");
       } else if (user.role === ERole.ATTENDANT) {
-        navigate("/dashboard/attendant/operation");
+        navigate("/dashboard/attendant/operations");
       }
     }
   }, [isAuthenticated, user, navigate]);

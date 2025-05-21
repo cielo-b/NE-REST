@@ -25,7 +25,18 @@ const Header = ({ user }: HeaderProps) => {
       <Toolbar>
         <Box sx={{ flexGrow: 1 }}>
           <Typography variant="h6" component="div">
-            Welcome, {user.name}
+            Welcome, {
+              (() => {
+                const userItem = localStorage.getItem("user");
+                if (!userItem) return "";
+                try {
+                  const userObj = typeof userItem === "string" ? JSON.parse(userItem) : userItem;
+                  return userObj?.firstname || "";
+                } catch {
+                  return "";
+                }
+              })()
+            }
           </Typography>
         </Box>
         <Button
